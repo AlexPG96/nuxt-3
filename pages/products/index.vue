@@ -1,40 +1,51 @@
 <template>
-    <div>
-        <h1>Products</h1>
-        <div>
-        <input type="text" @input="getInputValue" placeholder="Buscar producto..." />
-
-        <p v-if="store.loading">Cargando datos...</p>
-
-        <ul v-else-if="store.products.length" class="flex flex-nowrap gap-4">
-            <li class="w-50" v-for="(product, index) in store.products" :key="index">
-            <!-- <Card
+    <div class="p-6">
+      <h1 class="text-3xl font-bold mb-6">Products</h1>
+  
+      <div class="mb-6">
+        <input
+          type="text"
+          @input="getInputValue"
+          placeholder="Buscar producto..."
+          class="w-full p-3 border rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+        />
+      </div>
+  
+      <p v-if="store.loading" class="text-gray-600">Cargando datos...</p>
+  
+      <div
+        v-else-if="store.products.length"
+        class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
+      >
+      <!-- <Card
                 :name="product.title"
                 :price="product.price"
                 :image="product.image"
                 :description="product.description"
                 :handle="product.handle"
             /> -->
-            <Card
-                :title="product.title"
-                :price="product.price"
-                :image="product.image"
-                :description="product.description"
-            />
-            </li>
-        </ul>
-        </div>
+        <Card
+          v-for="(product, index) in store.products"
+          :key="index"
+          :title="product.title"
+          :price="product.price"
+          :image="product.image"
+          :description="product.description"
+        />
+      </div>
+  
+      <p v-else class="text-gray-500">No se encontraron productos.</p>
     </div>
-</template>
+  </template>
   
 
 <script setup>
-    import { onMounted } from 'vue'
     import { useProductsStore } from '~/stores/products'
 
     const store = useProductsStore()
 
     onMounted(() => {
+        if(store.products.length) return;
         store.fetchProducts()
     })
 
