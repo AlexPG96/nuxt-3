@@ -21,7 +21,7 @@ export const useProductsStore = defineStore('products', {
   
     actions: {
       async fetchProducts() {
-        if (this.products.length) return // 
+        if (this.products.length) return;
         this.loading = true
         try {
           const res = await fetch('https://fakestoreapi.com/products')
@@ -40,10 +40,14 @@ export const useProductsStore = defineStore('products', {
           this.products = this.allProducts
         } else {
           this.products = this.allProducts.filter((product) =>
-            product.handle.toLowerCase().includes(query.toLowerCase())
+            product.title.toLowerCase().includes(query.toLowerCase())
           )
         }
-      }
+      },
+
+      getProduct(handle) {
+
+      } 
     }
   })
   
