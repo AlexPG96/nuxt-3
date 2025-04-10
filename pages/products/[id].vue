@@ -23,16 +23,20 @@
   const route = useRoute();
   
   const store = useProductsStore()
-  
+  const product = ref(null)
+
+  onMounted(async () => {
   if (!store.products.length) {
-    store.fetchProducts()
+    await store.fetchProducts() // Esperamos a que termine
   }
   
   const handle = (titleProduct) => {
     return titleProduct.toLowerCase().replace(/-/g, '').replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '').replace(/-+/g, '-').replace(/^-|-$/g, '');
   } 
 
-  const product = store.products.find((product) => handle(product.title) === route.params.id)
+  product.value = store.products.find((prod) => handle(prod.title) === route.params.id)
+  });
+  
 </script>
 
 <style scoped>
