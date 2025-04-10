@@ -16,7 +16,8 @@ export const useProductsStore = defineStore('products', {
     state: () => ({
       products: [],
       allProducts: [],
-      loading: false
+      loading: false,
+      searchQuery: ''
     }),
   
     actions: {
@@ -36,13 +37,10 @@ export const useProductsStore = defineStore('products', {
       },
   
       filterProducts(query) {
-        if (!query) {
-          this.products = this.allProducts
-        } else {
-          this.products = this.allProducts.filter((product) =>
+        this.searchQuery = query;
+        this.products = this.allProducts.filter(product =>
             product.title.toLowerCase().includes(query.toLowerCase())
-          )
-        }
+        )
       },
 
       getProduct(handle) {

@@ -2,13 +2,21 @@
     <div class="p-6">
       <h1 class="text-3xl font-bold mb-6">Products</h1>
   
-      <div class="mb-6">
+      <div class="mb-6 relative">
         <input
-          type="text"
-          @input="getInputValue"
-          placeholder="Buscar producto..."
-          class="w-full p-3 border rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+        type="text"
+        v-model="searchText"
+        @input="getInputValue"
+        placeholder="Buscar producto..."
+        class="w-full p-3 border rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
         />
+        <button
+        v-if="searchText"
+        @click="clearSearch"
+        class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+        >
+        Borrar filtro
+        </button>
       </div>
   
       <p v-if="store.loading" class="text-gray-600">Cargando datos...</p>
@@ -42,15 +50,24 @@
 <script setup>
     import { useProductsStore } from '~/stores/products'
 
-    const store = useProductsStore()
+    const store = useProductsStore();
+    const searchText = ref('');
 
     onMounted(() => {
-        if(store.products.length) return;
-        store.fetchProducts()
+        if (!store.products.length) {
+            store.fetchProducts();
+        } 
+        searchText.value = store.searchQuery;
     })
 
     const getInputValue = (e) => {
-        store.filterProducts(e.target.value)
+        searchText.value = e.target.value;
+        store.filterProducts(searchText.value);
+    }
+
+    const clearSearch = () => {
+        searchText.value = '';
+        store.filterProducts('');
     }
 </script>
 
