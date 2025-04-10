@@ -1,20 +1,27 @@
 <template>
-  <div class="bg-indigo-900 text-white mb-2 p-2">
-    <div class="product-image">
-      <img :src="image" :alt="title" class="w-75" />
-    </div>
-    <div class="product-info">
-      <div class="d-flex justify-between">
-        <h3><a :href="'/products/' + handle">{{ title }}</a></h3>
-        <span>{{ price }}</span>
+  <div class="bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 relative">
+    <NuxtLink :to="'/products/' + handle" class="full-style-link"></NuxtLink>
+    <img :src="image" :alt="title" class="w-full p-4" />
+
+    <div class="p-4">
+      <div class="flex justify-between items-center mb-2">
+        <h3 class="text-lg font-semibold text-gray-800">
+            {{ truncate(title, 20) }}
+        </h3>
+        <span class="text-indigo-600 font-bold text-sm">
+          ${{ price }}
+        </span>
       </div>
-      <p>{{ description }}</p>
+
+      <p class="text-sm text-gray-600">
+        {{ truncate(description, 120) }}
+      </p>
     </div>
   </div>
 </template>
 
-
 <script setup>
+const { truncate } = useUtils();
 const props = defineProps({
   // name: {
   //   type: String,
@@ -51,6 +58,23 @@ const handle = props.title
   .replace(/^-|-$/g, '');
 </script>
 
-<style>
+<style scoped>
+
+.full-style-link {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+img {
+  width: 100%;
+  max-width: 200px;
+  margin: 0 auto;
+  max-height: 200px;
+  object-fit: contain;
+  height: 100%;
+}
 
 </style>
